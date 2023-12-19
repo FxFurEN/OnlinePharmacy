@@ -60,20 +60,20 @@
             // listBox1
             // 
             listBox1.BackColor = SystemColors.Menu;
+            listBox1.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
             listBox1.FormattingEnabled = true;
-            listBox1.ItemHeight = 25;
+            listBox1.ItemHeight = 28;
             listBox1.Location = new Point(12, 177);
             listBox1.Name = "listBox1";
-            listBox1.Size = new Size(180, 604);
+            listBox1.Size = new Size(223, 592);
             listBox1.TabIndex = 2;
             listBox1.SelectedIndexChanged += listBox1_SelectedIndexChanged;
             // 
             // panel1
             // 
-            panel1.AutoScroll = true;
-            panel1.Location = new Point(198, 177);
+            panel1.Location = new Point(241, 177);
             panel1.Name = "panel1";
-            panel1.Size = new Size(1332, 605);
+            panel1.Size = new Size(1289, 592);
             panel1.TabIndex = 3;
             // 
             // Form1
