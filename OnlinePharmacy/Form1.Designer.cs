@@ -33,6 +33,7 @@
             label1 = new Label();
             listBox1 = new ListBox();
             panel1 = new Panel();
+            label2 = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -51,11 +52,11 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(1378, 46);
+            label1.Location = new Point(1399, 46);
             label1.Name = "label1";
-            label1.Size = new Size(59, 25);
+            label1.Size = new Size(22, 25);
             label1.TabIndex = 1;
-            label1.Text = "label1";
+            label1.Text = "0";
             // 
             // listBox1
             // 
@@ -65,26 +66,42 @@
             listBox1.ItemHeight = 28;
             listBox1.Location = new Point(12, 177);
             listBox1.Name = "listBox1";
-            listBox1.Size = new Size(223, 592);
+            listBox1.Size = new Size(223, 620);
             listBox1.TabIndex = 2;
             listBox1.SelectedIndexChanged += listBox1_SelectedIndexChanged;
             // 
             // panel1
             // 
+            panel1.AutoSize = true;
             panel1.Location = new Point(241, 177);
             panel1.Name = "panel1";
-            panel1.Size = new Size(1289, 592);
+            panel1.Size = new Size(1289, 620);
             panel1.TabIndex = 3;
+            panel1.Paint += panel1_Paint;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point);
+            label2.Location = new Point(12, 35);
+            label2.Name = "label2";
+            label2.Size = new Size(96, 38);
+            label2.TabIndex = 4;
+            label2.Text = "label2";
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1554, 794);
+            Controls.Add(label2);
             Controls.Add(panel1);
             Controls.Add(listBox1);
             Controls.Add(label1);
             Controls.Add(pictureBox1);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "Form1";
             Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
@@ -98,5 +115,6 @@
         private Label label1;
         private ListBox listBox1;
         private Panel panel1;
+        private Label label2;
     }
 }

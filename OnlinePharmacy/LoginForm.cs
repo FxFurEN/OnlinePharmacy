@@ -22,8 +22,7 @@ namespace OnlinePharmacy
             if (userId != -1)
             {
                 MessageBox.Show("Авторизация успешна!");
-                //Form1 mainForm = new Form1(userId);
-                Form1 mainForm = new Form1();
+                Form1 mainForm = new Form1(FIO); // Передаем ФИО в конструкторе
                 this.Hide();
                 mainForm.FormClosed += (s, args) => this.Close();
                 mainForm.Show();

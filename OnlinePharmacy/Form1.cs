@@ -14,10 +14,19 @@ namespace OnlinePharmacy
     public partial class Form1 : Form
     {
         private const string ConnectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=OnlinePharmacy_db.accdb;Persist Security Info=False;";
-
+        private Dictionary<string, int> shoppingCart = new Dictionary<string, int>();
+        private string userFIO;
         public Form1()
         {
             InitializeComponent();
+
+        }
+
+        public Form1(string userFIO)
+        {
+            InitializeComponent();
+            this.userFIO = userFIO;
+            label2.Text = $"Добро пожаловать, {userFIO}!";
             FillCategoriesListBox();
         }
 
@@ -42,8 +51,11 @@ namespace OnlinePharmacy
 
         private void pictureBox1_Click(object sender, EventArgs e)
         {
-
+            CartForm cartForm = new CartForm(shoppingCart, this);
+            cartForm.ShowDialog();
         }
+
+
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -66,12 +78,12 @@ namespace OnlinePharmacy
                     {
                         // Создаем блок для каждой категории
                         Panel categoryPanel = new Panel();
-                        categoryPanel.Size = new Size(1290, 600);
+                        categoryPanel.Size = new Size(1290, 610);
                         categoryPanel.AutoSizeMode = AutoSizeMode.GrowOnly;
                         categoryPanel.AutoScroll = true;
 
                         int x = 10;
-                        int y = 10;
+                        int y = 0;
 
                         while (reader.Read())
                         {
@@ -83,16 +95,10 @@ namespace OnlinePharmacy
                             pillPanel.Size = new Size(1100, 150);
                             pillPanel.Location = new Point(x, y);
 
-                            PictureBox pictureBox = new PictureBox();
-                            //   pictureBox.Image = GetPillImage(reader["ImageFileName"].ToString());
-                            pictureBox.SizeMode = PictureBoxSizeMode.Zoom;
-                            pictureBox.Size = new Size(60, 60);
-                            pictureBox.Location = new Point(10, 10);
-
                             Label nameLabel = new Label();
                             nameLabel.Text = reader["NamePill"].ToString();
                             nameLabel.Location = new Point(80, 10);
-                            nameLabel.Size = new Size(200, 30);
+                            nameLabel.AutoSize = true;
 
                             Label priceLabel = new Label();
                             priceLabel.Text = $"Цена: {reader["FullPrice"].ToString()} тг.";
@@ -113,10 +119,10 @@ namespace OnlinePharmacy
                             buyButton.Location = new Point(80, 100);
                             buyButton.Tag = reader["ID"].ToString();
                             buyButton.Size = new Size(100, 30);
-                            // buyButton.Click += BuyButtonClick;
+                            buyButton.Click += buyButton_Click;
 
                             // Добавляем элементы в блок
-                            pillPanel.Controls.Add(pictureBox);
+
                             pillPanel.Controls.Add(nameLabel);
                             pillPanel.Controls.Add(priceLabel);
                             pillPanel.Controls.Add(buyButton);
@@ -129,7 +135,7 @@ namespace OnlinePharmacy
                             if (x > 100) // Если достигли предела по ширине, переходим на следующую строку
                             {
                                 x = 10;
-                                y += 220;
+                                y += 180;
                             }
                         }
 
@@ -139,15 +145,48 @@ namespace OnlinePharmacy
                 }
             }
         }
-        private void ScrollToTop()
+        private void buyButton_Click(object sender, EventArgs e)
         {
-            panel1.AutoScrollPosition = new Point(0, 0);
-        }
+            Button buyButton = (Button)sender;
+            string pillId = buyButton.Tag.ToString();
 
-        private void ScrollToBottom()
+            using (OleDbConnection connection = new OleDbConnection(ConnectionString))
+            {
+                connection.Open();
+                string query = "SELECT NamePill FROM Pills WHERE ID = @PillID";
+                using (OleDbCommand command = new OleDbCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@PillID", pillId);
+
+                    object result = command.ExecuteScalar();
+
+                    if (result != null)
+                    {
+                        string pillName = result.ToString();
+
+                        // Добавим товар в корзину или увеличим количество
+                        if (shoppingCart.ContainsKey(pillName))
+                        {
+                            shoppingCart[pillName]++;
+                        }
+                        else
+                        {
+                            shoppingCart.Add(pillName, 1);
+                        }
+
+                        UpdateCartLabel();
+                    }
+                }
+            }
+        }
+        public void UpdateCartLabel()
         {
-            panel1.AutoScrollPosition = new Point(0, panel1.VerticalScroll.Maximum);
+            int totalItems = shoppingCart.Values.Sum();
+            label1.Text = $"{totalItems}";
         }
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
 
+        }
     }
 }
